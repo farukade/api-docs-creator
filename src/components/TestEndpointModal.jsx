@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useApp } from "../App";
 
 const TestEndpointModal = ({ endpoint, baseUrl, onClose }) => {
-  const { actions } = useApp();
+  const { actions, state } = useApp();
+  const { token } = state;
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [formData, setFormData] = useState({
@@ -19,11 +20,11 @@ const TestEndpointModal = ({ endpoint, baseUrl, onClose }) => {
     setLoading(true);
 
     try {
-      let headers = {};
+      let headers = { Authorization: `Bearer ${token}` };
       let body = null;
 
       if (formData.headers) {
-        headers = JSON.parse(formData.headers);
+        headers = { ...headers, ...JSON.parse(formData.headers) };
       }
 
       if (endpoint.method !== "GET" && formData.body) {
@@ -57,6 +58,13 @@ const TestEndpointModal = ({ endpoint, baseUrl, onClose }) => {
     if (status >= 400 && status < 500) return "status-4xx";
     return "status-5xx";
   };
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem("api-docs-creator-token");
+    if (savedToken) {
+      actions.setToken(savedToken);
+    }
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
