@@ -20,7 +20,7 @@ const TestEndpointModal = ({ endpoint, baseUrl, onClose }) => {
     setLoading(true);
 
     try {
-      let headers = { Authorization: `Bearer ${token}` };
+      let headers = { authorization: `Bearer ${token}` };
       let body = null;
 
       if (formData.headers) {
