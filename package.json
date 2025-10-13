@@ -19,7 +19,9 @@
     "usage": "node bin/cli.js usage",
     "test": "echo 'No tests yet' && exit 0",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "publish": "npm publish",
+    "version-update": "npm version"
   },
   "keywords": [
     "api",
