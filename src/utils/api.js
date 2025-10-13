@@ -1,7 +1,9 @@
 // API Configuration
 export const API_CONFIG = {
   BASE_URL:
-    process.env.NODE_ENV === "development" ? "http://localhost:3000" : "",
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : window?.location?.href || "",
   ENDPOINTS: {
     CONFIG: "/config",
     STRUCTURE: "/structure",
@@ -9,15 +11,18 @@ export const API_CONFIG = {
     FOLDERS: "/folders",
     TEST_ENDPOINT: "/test-endpoint",
   },
-  BASE_PATH: "/api-docs",
+  BASE_PATH: "/api-docs-creator",
 };
 
 // API helper function
 export async function apiCall(endpoint, options = {}) {
   try {
-    const url = API_CONFIG.BASE_URL + API_CONFIG.BASE_PATH + endpoint;
-    console.log({ url });
-    const response = await fetch(url, {
+    const url = new URL(API_CONFIG.BASE_URL);
+    url.pathname =
+      API_CONFIG.BASE_PATH +
+      (endpoint?.startsWith("/") ? endpoint : `/${endpoint}`);
+
+    const response = await fetch(url.href, {
       headers: {
         "Content-Type": "application/json",
         ...options.headers,
@@ -62,4 +67,8 @@ export function getStatusColorClass(statusCode) {
 
 export function getBasePath() {
   return API_CONFIG.BASE_PATH;
+}
+
+export function getBaseUrl() {
+  return API_CONFIG.BASE_URL;
 }

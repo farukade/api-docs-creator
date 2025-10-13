@@ -3,7 +3,7 @@
 const { Command } = require("commander");
 const chalk = require("chalk");
 const express = require("express");
-const apiDocsCreator = require("../lib/index");
+const { apiDocsCreator, defaultPath } = require("../lib/index");
 
 const program = new Command();
 
@@ -28,7 +28,7 @@ program
 
       // Mount the API Docs Creator middleware
       app.use(
-        options.path,
+        defaultPath,
         apiDocsCreator({
           name: "Demo API Documentation",
           description: "Demo of API Docs Creator middleware",
@@ -40,7 +40,7 @@ program
       );
 
       // Add a simple API endpoint for testing
-      app.get("/api/demo", (req, res) => {
+      app.get("/demo", (req, res) => {
         res.json({
           message: "Hello from demo API!",
           timestamp: new Date().toISOString(),
@@ -56,7 +56,7 @@ program
           )
         );
         console.log(
-          chalk.gray(`🔗 Demo API endpoint: http://localhost:${port}/api/demo`)
+          chalk.gray(`🔗 Demo API endpoint: http://localhost:${port}/demo`)
         );
         console.log("");
         console.log(chalk.yellow("Press Ctrl+C to stop the server"));
@@ -79,12 +79,12 @@ program
     console.log(chalk.green("Basic Express Integration:"));
     console.log(`
 const express = require('express');
-const apiDocsCreator = require('api-docs-creator');
+const { apiDocsCreator, defaultPath } = require('api-docs-creator');
 
 const app = express();
 
 // Mount API Docs Creator at /api-docs
-app.use('/api-docs', apiDocsCreator({
+app.use(defaultPath, apiDocsCreator({
   name: 'My API',
   description: 'API documentation and testing',
   baseUrl: 'https://api.myproject.com'
@@ -95,7 +95,7 @@ app.listen(3000);
 
     console.log(chalk.green("Advanced Configuration:"));
     console.log(`
-app.use('/docs', apiDocsCreator({
+app.use(defaultPath, apiDocsCreator({
   name: 'Advanced API',
   description: 'Full featured API documentation',
   version: '2.0.0',
@@ -108,7 +108,9 @@ app.use('/docs', apiDocsCreator({
 }));
     `);
 
-    console.log(chalk.yellow("\nThen visit: http://localhost:3000/api-docs"));
+    console.log(
+      chalk.yellow("\nThen visit: http://localhost:3000/api-docs-creator")
+    );
   });
 
 if (process.argv.length === 2) {

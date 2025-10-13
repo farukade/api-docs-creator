@@ -1,7 +1,7 @@
 // api-docs.module.ts
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as apiDocsCreator from 'api-docs-creator';
+import { apiDocsCreator, defaultPath } from 'api-docs-creator';
 
 @Module({
   imports: [ConfigModule],
@@ -22,6 +22,6 @@ export class ApiDocsModule implements NestModule {
 
     consumer
       .apply(apiDocsMiddleware)
-      .forRoutes('/api-docs');
+      .forRoutes(defaultPath);
   }
 }

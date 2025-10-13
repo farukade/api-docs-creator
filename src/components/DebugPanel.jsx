@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useApp } from "../App";
-import { apiCall, getBasePath } from "../utils/api";
+import { apiCall, getBasePath, getBaseUrl } from "../utils/api";
 
 const DebugPanel = () => {
   const { state } = useApp();
@@ -11,13 +11,14 @@ const DebugPanel = () => {
     console.log("Testing API connection...");
 
     const tests = [
-      { name: "Config", endpoint: "/api/config" },
-      { name: "Endpoints", endpoint: "/api/endpoints" },
-      { name: "Structure", endpoint: "/api/structure" },
+      { name: "Config", endpoint: "config" },
+      { name: "Endpoints", endpoint: "endpoints" },
+      { name: "Structure", endpoint: "structure" },
       { name: "Health", endpoint: "/health" },
     ];
 
     const basePath = getBasePath();
+    const baseUrl = getBaseUrl();
     const results = [];
 
     for (const test of tests) {
@@ -26,7 +27,12 @@ const DebugPanel = () => {
         results.push({
           name: test.name,
           endpoint: test.endpoint,
-          fullUrl: window.location.origin + basePath + test.endpoint,
+          fullUrl:
+            baseUrl +
+            basePath +
+            (test.endpoint.startsWith("/")
+              ? test.endpoint
+              : `/${test.endpoint}`),
           success: result.success,
           status: result.success ? "OK" : "FAILED",
           error:

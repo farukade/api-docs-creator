@@ -486,15 +486,29 @@ const CreateEndpointForm = ({
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-2">Path</label>
-        <input
-          type="text"
-          name="path"
-          required
-          placeholder="/api/endpoint"
-          className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">Path</label>
+          <input
+            type="text"
+            name="path"
+            required
+            placeholder="endpoint"
+            className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            Authorization type
+          </label>
+          <select
+            name="token"
+            className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="token">Bearer Token</option>
+            <option value="">None</option>
+          </select>
+        </div>
       </div>
 
       <div>
@@ -527,16 +541,20 @@ const CreateEndpointForm = ({
           </p>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-2">Filename</label>
-          <input
-            type="text"
-            name="filename"
-            required
-            placeholder="endpoint-name"
+          <label className="block text-sm font-medium mb-2">Content Type</label>
+          <select
+            name="contentType"
             className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
+          >
+            <option value="text/plain">Text plain</option>
+            <option value="text/html">Text HTML</option>
+            <option value="application/json">Application JSON</option>
+            <option value="application/x-www-form-urlencoded">
+              Application x-www-form-urlencoded
+            </option>
+          </select>
           <p className="text-xs text-gray-400 mt-1">
-            Used for the JSON file name
+            More types would be added in future releases
           </p>
         </div>
       </div>

@@ -22,6 +22,7 @@ const initialState = {
   modal: null,
   toasts: [],
   loading: true,
+  token: null,
 };
 
 // Reducer
@@ -54,6 +55,8 @@ function appReducer(state, action) {
       };
     case "SET_LOADING":
       return { ...state, loading: action.payload };
+    case "SET_TOKEN":
+      return { ...state, token: action.payload };
     default:
       return state;
   }
@@ -80,10 +83,11 @@ export function AppProvider({ children }) {
     removeToast: (id) => dispatch({ type: "REMOVE_TOAST", payload: id }),
     setLoading: (loading) =>
       dispatch({ type: "SET_LOADING", payload: loading }),
+    setToken: (token) => dispatch({ type: "SET_TOKEN", payload: token }),
   };
 
   const loadConfig = async () => {
-    const result = await apiCall("/api/config");
+    const result = await apiCall("config");
     if (result.success) {
       actions.setConfig(result.data);
     }
@@ -92,8 +96,8 @@ export function AppProvider({ children }) {
   const loadApiStructure = async () => {
     try {
       const [structureResult, endpointsResult] = await Promise.all([
-        apiCall("/api/structure"),
-        apiCall("/api/endpoints"),
+        apiCall("structure"),
+        apiCall("endpoints"),
       ]);
 
       if (structureResult.success) {
@@ -127,7 +131,7 @@ export function AppProvider({ children }) {
   };
 
   const showEndpoint = async (endpointId) => {
-    const result = await apiCall(`/api/endpoints/${endpointId}`);
+    const result = await apiCall(`endpoints/${endpointId}`);
     if (result.success) {
       actions.setCurrentEndpoint(result.data);
       actions.setEditing(false);
@@ -147,7 +151,7 @@ export function AppProvider({ children }) {
 
     // Otherwise, load the endpoint data first
     try {
-      const result = await apiCall(`/api/endpoints/${endpointId}`);
+      const result = await apiCall(`endpoints/${endpointId}`);
       if (result.success && result.data) {
         actions.setCurrentEndpoint(result.data);
         actions.setEditing(true);
@@ -172,7 +176,7 @@ export function AppProvider({ children }) {
 
     if (!confirm("Are you sure you want to delete this endpoint?")) return;
 
-    const result = await apiCall(`/api/endpoints/${endpointId}`, {
+    const result = await apiCall(`endpoints/${endpointId}`, {
       method: "DELETE",
     });
 
@@ -195,7 +199,7 @@ export function AppProvider({ children }) {
 
   const saveEndpoint = async (updatedEndpoint) => {
     try {
-      const result = await apiCall(`/api/endpoints/${updatedEndpoint.id}`, {
+      const result = await apiCall(`endpoints/${updatedEndpoint.id}`, {
         method: "PUT",
         body: JSON.stringify(updatedEndpoint),
       });
@@ -228,7 +232,7 @@ export function AppProvider({ children }) {
   };
 
   const createEndpoint = async (data) => {
-    const result = await apiCall("/api/endpoints", {
+    const result = await apiCall("endpoints", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -253,7 +257,7 @@ export function AppProvider({ children }) {
   };
 
   const createFolder = async (data) => {
-    const result = await apiCall("/api/folders", {
+    const result = await apiCall("folders", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -276,7 +280,7 @@ export function AppProvider({ children }) {
   };
 
   const testEndpoint = async (testData) => {
-    const result = await apiCall("/api/test-endpoint", {
+    const result = await apiCall("test-endpoint", {
       method: "POST",
       body: JSON.stringify(testData),
     });

@@ -1,8 +1,9 @@
 import React from "react";
 import { useApp } from "../App";
+import UpdateTokenModal from "./UpdateToken";
 
 const Header = () => {
-  const { state } = useApp();
+  const { state, actions } = useApp();
   const { currentConfig, currentEndpoint, isEditing, currentView } = state;
 
   const getPageTitle = () => {
@@ -19,10 +20,29 @@ const Header = () => {
 
   const getEditIndicator = () => {
     if (currentConfig?.canEdit) {
-      return <span className="text-green-400">✏️ Edit Mode</span>;
+      return (
+        <>
+          <span
+            className="text-green-400 mr-3 cursor-pointer"
+            onClick={() => {
+              handleUpdateTokenModal();
+            }}
+          >
+            ✏️ Token ***
+          </span>
+          <span className="text-green-400">✏️ Edit Mode</span>
+        </>
+      );
     } else {
       return <span className="text-yellow-400">👁️ View Only</span>;
     }
+  };
+
+  const handleUpdateTokenModal = () => {
+    actions.setModal({
+      title: "Update Token",
+      content: <UpdateTokenModal onClose={() => actions.setModal(null)} />,
+    });
   };
 
   return (

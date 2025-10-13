@@ -12,13 +12,13 @@ npm install api-docs-creator
 
 ```javascript
 const express = require("express");
-const apiDocsCreator = require("api-docs-creator");
+const { apiDocsCreator, defaultPath } = require("api-docs-creator");
 
 const app = express();
 
 // Add API Docs Creator middleware
 app.use(
-  "/api-docs",
+  defaultPath,
   apiDocsCreator({
     name: "My API",
     description: "API documentation and testing",
@@ -27,7 +27,7 @@ app.use(
 );
 
 // Your existing API routes
-app.get("/api/users", (req, res) => {
+app.get("users", (req, res) => {
   res.json({ users: [] });
 });
 
@@ -39,30 +39,31 @@ app.listen(3000, () => {
 
 ## Configuration Options
 
-| Option              | Type    | Default                                   | Description                     |
-| ------------------- | ------- | ----------------------------------------- | ------------------------------- |
-| `name`              | string  | "API Documentation"                       | Project name                    |
-| `description`       | string  | "API documentation and testing interface" | Project description             |
-| `version`           | string  | "1.0.0"                                   | API version                     |
-| `author`            | string  | "API Team"                                | Author name                     |
-| `baseUrl`           | string  | "http://localhost:3000"                   | Base API URL for testing        |
-| `path`              | string  | "/api-creator"                            | Mount path (auto-detected)      |
-| `allowExternalEdit` | boolean | false                                     | Allow editing from external IPs |
-| `theme`             | string  | "dark"                                    | UI theme                        |
-| `primaryColor`      | string  | "#6B7280"                                 | Primary color                   |
-| `dataDir`           | string  | "./api-docs"                              | Data storage directory          |
+| Option                 | Type    | Default                                   | Description                     |
+| ---------------------- | ------- | ----------------------------------------- | ------------------------------- |
+| `name`                 | string  | "API Documentation"                       | Project name                    |
+| `description`          | string  | "API documentation and testing interface" | Project description             |
+| `version`              | string  | "1.0.0"                                   | API version                     |
+| `author`               | string  | "API Team"                                | Author name                     |
+| `baseUrl`              | string  | "http://localhost:3000"                   | Base API URL for testing        |
+| `path`                 | string  | "/api-creator"                            | Mount path (auto-detected)      |
+| `allowExternalEdit`    | boolean | false                                     | Allow editing from external IPs |
+| `theme`                | string  | "dark"                                    | UI theme                        |
+| `primaryColor`         | string  | "#6B7280"                                 | Primary color                   |
+| `dataDir`              | string  | "./api-docs"                              | Data storage directory          |
+| `createSampleEndpoint` | boolean | true                                      | Creates sample endpoint         |
 
 ## Advanced Usage
 
 ```javascript
 const express = require("express");
-const apiDocsCreator = require("api-docs-creator");
+const { apiDocsCreator, defaultPath } = require("api-docs-creator");
 
 const app = express();
 
 // Advanced configuration
 app.use(
-  "/docs",
+  defaultPath,
   apiDocsCreator({
     name: "Advanced API",
     description: "Full featured API documentation",
@@ -73,6 +74,7 @@ app.use(
     dataDir: "./custom-api-docs",
     theme: "dark",
     primaryColor: "#3B82F6",
+    createSampleEndpoint: false,
   })
 );
 
@@ -133,12 +135,12 @@ npx api-docs-creator demo --port 3000 --path /docs
 
 ```javascript
 const express = require("express");
-const apiDocsCreator = require("api-docs-creator");
+const { apiDocsCreator, defaultPath } = require("api-docs-creator");
 
 const app = express();
 
-// Mount at /api-docs
-app.use("/api-docs", apiDocsCreator());
+// Mount at /api-docs-creator
+app.use(defaultPath, apiDocsCreator());
 
 app.listen(3000);
 ```
@@ -150,7 +152,7 @@ const app = express();
 
 // Public API docs
 app.use(
-  "/docs",
+  defaultPath,
   apiDocsCreator({
     name: "Public API",
     allowExternalEdit: false,
@@ -159,7 +161,7 @@ app.use(
 
 // Internal API docs
 app.use(
-  "/internal-docs",
+  defaultPath,
   apiDocsCreator({
     name: "Internal API",
     allowExternalEdit: true,
@@ -175,7 +177,7 @@ const app = express();
 
 // Protect with authentication middleware
 app.use(
-  "/admin/api-docs",
+  defaultPath,
   authMiddleware,
   apiDocsCreator({
     name: "Admin API",

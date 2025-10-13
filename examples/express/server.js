@@ -6,7 +6,7 @@
  */
 
 const express = require("express");
-const apiDocsCreator = require("../../lib/index");
+const { apiDocsCreator, defaultPath } = require("../../lib/index");
 const cors = require("cors");
 
 const app = express();
@@ -25,19 +25,20 @@ app.use((req, res, next) => {
 
 // Mount API Docs Creator at /api-docs
 app.use(
-  "/api-docs",
+  defaultPath,
   apiDocsCreator({
     name: "Example API",
     description: "Example API documentation using API Docs Creator middleware",
     version: "1.0.0",
     author: "Example Team",
     baseUrl: `http://localhost:${PORT}`,
-    allowExternalEdit: true, // Enable editing for demo
+    allowExternalEdit: true,
+    createSampleEndpoint: true,
   })
 );
 
 // Example API routes for testing
-app.get("/api/users", (req, res) => {
+app.get("/users", (req, res) => {
   res.json({
     users: [
       { id: 1, name: "John Doe", email: "john@example.com" },
@@ -48,7 +49,7 @@ app.get("/api/users", (req, res) => {
   });
 });
 
-app.post("/api/users", (req, res) => {
+app.post("/users", (req, res) => {
   res.status(201).json({
     id: 3,
     name: req.body.name,
@@ -57,7 +58,7 @@ app.post("/api/users", (req, res) => {
   });
 });
 
-app.get("/api/users/:id", (req, res) => {
+app.get("/users/:id", (req, res) => {
   const userId = parseInt(req.params.id);
   if (userId === 1) {
     res.json({ id: 1, name: "John Doe", email: "john@example.com" });
@@ -79,19 +80,16 @@ app.get("/health", (req, res) => {
 app.get("/", (req, res) => {
   res.json({
     message: "Example API Server",
-    documentation: `http://localhost:${PORT}/api-docs`,
-    endpoints: [
-      "GET /api/users",
-      "POST /api/users",
-      "GET /api/users/:id",
-      "GET /health",
-    ],
+    documentation: `http://localhost:${PORT}/api-docs-creator`,
+    endpoints: ["GET /users", "POST /users", "GET /users/:id", "GET /health"],
   });
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 Example server running on http://localhost:${PORT}`);
-  console.log(`📖 API Documentation: http://localhost:${PORT}/api-docs`);
+  console.log(
+    `📖 API Documentation: http://localhost:${PORT}/api-docs-creator`
+  );
   console.log(`🔗 API Base: http://localhost:${PORT}/api`);
   console.log("");
   console.log("Press Ctrl+C to stop");

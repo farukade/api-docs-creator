@@ -206,7 +206,7 @@ Use the `apiCall` utility:
 ```javascript
 import { apiCall } from "../utils/api";
 
-const result = await apiCall("/api/endpoints", {
+const result = await apiCall("endpoints", {
   method: "POST",
   body: JSON.stringify(data),
 });

@@ -185,7 +185,7 @@ const CreateEndpointForm = ({ onSubmit, onCancel }) => {
           type="text"
           name="path"
           required
-          placeholder="/api/endpoint"
+          placeholder="endpoint"
           className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
