@@ -1,6 +1,6 @@
 {
   "name": "api-docs-creator",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "Simple file-based REST API documentation builder with testing",
   "main": "lib/index.js",
   "bin": {
@@ -20,7 +20,7 @@
     "test": "echo 'No tests yet' && exit 0",
     "build": "vite build",
     "preview": "vite preview",
-    "publish": "npm publish",
+    "publish-custom": "yarn build && yarn publish",
     "version-update": "npm version"
   },
   "keywords": [
