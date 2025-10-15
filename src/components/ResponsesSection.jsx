@@ -91,8 +91,36 @@ const ResponsesSection = ({
                 />
               </div>
             </div>
-          ) : response.example && Object.keys(response.example).length ? (
-            <JsonDisplay data={response.example} />
+          ) : response.example ? (
+            (() => {
+              // Handle both string and object formats
+              let exampleData;
+              try {
+                exampleData =
+                  typeof response.example === "string"
+                    ? JSON.parse(response.example)
+                    : response.example;
+
+                // Check if parsed data is empty object
+                if (
+                  typeof exampleData === "object" &&
+                  Object.keys(exampleData).length === 0
+                ) {
+                  return (
+                    <p className="text-gray-500 text-sm">No example response</p>
+                  );
+                }
+
+                return <JsonDisplay data={exampleData} />;
+              } catch (e) {
+                // If parsing fails, show as plain text
+                return (
+                  <div className="bg-gray-900 rounded-lg p-4 font-mono text-sm overflow-auto max-h-96 border border-gray-700">
+                    <pre className="text-gray-300">{response.example}</pre>
+                  </div>
+                );
+              }
+            })()
           ) : (
             <p className="text-gray-500 text-sm">No example response</p>
           )}

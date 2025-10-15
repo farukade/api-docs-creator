@@ -4,6 +4,7 @@ import { resolve } from "path";
 
 export default defineConfig({
   plugins: [react()],
+  base: "/api-docs-creator/",
   root: "src",
   build: {
     outDir: resolve(__dirname, "public"), // compile into public/
