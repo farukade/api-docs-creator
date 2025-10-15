@@ -1,6 +1,6 @@
 {
   "name": "api-docs-creator",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Simple file-based REST API documentation builder with testing",
   "main": "lib/index.js",
   "bin": {
