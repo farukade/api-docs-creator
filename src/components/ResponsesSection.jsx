@@ -1,4 +1,5 @@
 import React from "react";
+import JsonDisplay from "./JsonDisplay";
 
 const ResponsesSection = ({
   responses,
@@ -91,9 +92,7 @@ const ResponsesSection = ({
               </div>
             </div>
           ) : response.example && Object.keys(response.example).length ? (
-            <div className="bg-gray-900 rounded p-3 font-mono text-sm overflow-auto">
-              <pre>{JSON.stringify(response.example, null, 2)}</pre>
-            </div>
+            <JsonDisplay data={response.example} />
           ) : (
             <p className="text-gray-500 text-sm">No example response</p>
           )}
