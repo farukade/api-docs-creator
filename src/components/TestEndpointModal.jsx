@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useApp } from "../App";
+import JsonDisplay from "./JsonDisplay";
 
 const TestEndpointModal = ({ endpoint, baseUrl, onClose }) => {
   const { actions, state } = useApp();
@@ -109,7 +110,7 @@ const TestEndpointModal = ({ endpoint, baseUrl, onClose }) => {
         <div>
           <label className="block text-sm font-medium mb-2">Response</label>
           <div className="bg-gray-900 border border-gray-600 rounded-md p-4">
-            <div className="mb-2">
+            <div className="mb-3">
               {result.success ? (
                 <>
                   <span
@@ -127,11 +128,15 @@ const TestEndpointModal = ({ endpoint, baseUrl, onClose }) => {
                 <span className="response-status status-5xx">ERROR</span>
               )}
             </div>
-            <pre className="text-sm font-mono overflow-auto max-h-64">
-              {result.success
-                ? JSON.stringify(result.data.data, null, 2)
-                : result.error || result.response?.message || "Request failed"}
-            </pre>
+            {result.success ? (
+              <JsonDisplay data={result.data.data} maxHeight="max-h-64" />
+            ) : (
+              <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-3">
+                <pre className="text-sm font-mono text-red-300 whitespace-pre-wrap">
+                  {result.error || result.response?.message || "Request failed"}
+                </pre>
+              </div>
+            )}
           </div>
         </div>
       )}

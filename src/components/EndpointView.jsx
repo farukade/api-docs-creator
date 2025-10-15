@@ -3,23 +3,22 @@ import { useApp } from "../App";
 import ParametersSection from "./ParametersSection";
 import ResponsesSection from "./ResponsesSection";
 import TestEndpointModal from "./TestEndpointModal";
+import JsonDisplay from "./JsonDisplay";
 
 const EndpointView = () => {
   const { state, actions } = useApp();
   const { currentEndpoint, isEditing, currentConfig } = state;
 
   const [editData, setEditData] = useState(null);
-  const [activeField, setActiveField] = useState(null); // Track which field is being edited
-  const [fieldValues, setFieldValues] = useState({}); // Store temporary values for individual fields
+  const [activeField, setActiveField] = useState(null);
+  const [fieldValues, setFieldValues] = useState({});
 
   React.useEffect(() => {
     if (currentEndpoint && isEditing && !editData) {
-      // Initialize editData immediately when entering edit mode
       setEditData({ ...currentEndpoint });
-      setFieldValues({}); // Reset field values when entering edit mode
-      setActiveField(null); // Reset active field
+      setFieldValues({});
+      setActiveField(null);
     } else if (!isEditing && editData) {
-      // Reset edit states when exiting edit mode
       setEditData(null);
       setActiveField(null);
       setFieldValues({});
@@ -36,7 +35,6 @@ const EndpointView = () => {
 
   const endpoint = isEditing ? editData || currentEndpoint : currentEndpoint;
 
-  // Handle clicking on an editable field
   const handleFieldClick = (fieldPath, currentValue) => {
     if (!isEditing) return;
 
@@ -47,11 +45,9 @@ const EndpointView = () => {
     });
   };
 
-  // Handle saving a specific field
   const handleFieldSave = (fieldPath) => {
     const value = fieldValues[fieldPath];
 
-    // Validate JSON fields if needed
     if (fieldPath.includes("headers") || fieldPath.includes("example")) {
       try {
         if (typeof value === "string" && value.trim()) {
@@ -74,7 +70,6 @@ const EndpointView = () => {
     });
   };
 
-  // Handle canceling field edit
   const handleFieldCancel = (fieldPath) => {
     setActiveField(null);
     setFieldValues({
@@ -83,7 +78,6 @@ const EndpointView = () => {
     });
   };
 
-  // Handle key press for field editing
   const handleFieldKeyPress = (e, fieldPath) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -95,7 +89,6 @@ const EndpointView = () => {
 
   const handleSave = async () => {
     try {
-      // Validate JSON fields
       if (editData.parameters?.headers) {
         JSON.parse(
           typeof editData.parameters.headers === "string"
@@ -112,7 +105,6 @@ const EndpointView = () => {
         );
       }
 
-      // Validate response examples
       for (const statusCode of Object.keys(editData.responses)) {
         const example = editData.responses[statusCode].example;
         if (example) {
@@ -165,7 +157,6 @@ const EndpointView = () => {
 
   const updateNestedEditData = (path, value) => {
     setEditData((prev) => {
-      // Initialize editData if it doesn't exist
       const baseData = prev || { ...currentEndpoint };
       const newData = { ...baseData };
       const keys = path.split(".");
@@ -181,7 +172,6 @@ const EndpointView = () => {
     });
   };
 
-  // Render an editable field
   const renderEditableField = (
     fieldPath,
     currentValue,
@@ -279,7 +269,6 @@ const EndpointView = () => {
       );
     }
 
-    // When in edit mode but field is not active - show clickable field
     return (
       <div
         onClick={(e) => {
@@ -309,7 +298,6 @@ const EndpointView = () => {
     );
   };
 
-  // Render an editable select field
   const renderEditableSelect = (
     fieldPath,
     currentValue,
@@ -339,7 +327,6 @@ const EndpointView = () => {
                 ...fieldValues,
                 [fieldPath]: e.target.value,
               });
-              // Auto-save select fields since they're discrete choices
               setTimeout(() => handleFieldSave(fieldPath), 0);
             }}
             className="bg-gray-700 border border-blue-500 rounded px-2 py-1 text-sm w-full focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -580,11 +567,7 @@ const EndpointView = () => {
                   </div>
                 ) : endpoint.requestBody?.example &&
                   Object.keys(endpoint.requestBody.example).length ? (
-                  <div className="bg-gray-900 rounded p-3 font-mono text-sm overflow-auto">
-                    <pre>
-                      {JSON.stringify(endpoint.requestBody.example, null, 2)}
-                    </pre>
-                  </div>
+                  <JsonDisplay data={endpoint.requestBody.example} />
                 ) : (
                   <p className="text-gray-500 text-sm">
                     No request body example
