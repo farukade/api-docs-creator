@@ -1,5 +1,6 @@
 import React from "react";
 import { useApp } from "../App";
+import UpdateTokenModal from "./UpdateToken";
 
 const WelcomeView = () => {
   const { state, actions } = useApp();
@@ -33,6 +34,13 @@ const WelcomeView = () => {
           onCancel={() => actions.setModal(null)}
         />
       ),
+    });
+  };
+
+  const handleUpdateTokenModal = () => {
+    actions.setModal({
+      title: "Update Token",
+      content: <UpdateTokenModal onClose={() => actions.setModal(null)} />,
     });
   };
 
@@ -132,6 +140,15 @@ const WelcomeView = () => {
             <div className="mt-8 p-4 bg-gray-800 border border-gray-700 rounded-lg">
               <h3 className="font-semibold mb-2">Base URL</h3>
               <code className="text-blue-400">{currentConfig.baseUrl}</code>
+              <br />
+              <span
+                className="text-green-400 mr-5 cursor-pointer"
+                onClick={() => {
+                  handleUpdateTokenModal();
+                }}
+              >
+                ✏️ Update Token ***
+              </span>
             </div>
           )}
       </div>

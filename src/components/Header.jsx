@@ -23,18 +23,30 @@ const Header = () => {
       return (
         <>
           <span
-            className="text-green-400 mr-3 cursor-pointer"
+            className="text-green-400 mr-5 cursor-pointer"
             onClick={() => {
               handleUpdateTokenModal();
             }}
           >
-            ✏️ Token ***
+            ✏️ Update Token ***
           </span>
           <span className="text-green-400">✏️ Edit Mode</span>
         </>
       );
     } else {
-      return <span className="text-yellow-400">👁️ View Only</span>;
+      return (
+        <>
+          <span
+            className="text-green-400 mr-5 cursor-pointer"
+            onClick={() => {
+              handleUpdateTokenModal();
+            }}
+          >
+            ✏️ Update Token ***
+          </span>
+          <span className="text-yellow-400">👁️ View Only</span>
+        </>
+      );
     }
   };
 
